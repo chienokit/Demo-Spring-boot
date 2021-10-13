@@ -43,10 +43,10 @@ public class CustomUserDetailService implements UserDetailsService {
                 }
                 grantedAuthorityList.add(grantedAuthority);
             }
-            CustomUserDetails customerUserDetails = new CustomUserDetails(userEntity);
+            CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
             //UserDetails userDetails = new User(userEntity.getUserName(), userEntity.getPassWord(), grantedAuthorityList);
             //return userDetails;
-            return customerUserDetails;
+            return customUserDetails;
         }
     }
     // JWTAuthenticationFilter sẽ sử dụng hàm này

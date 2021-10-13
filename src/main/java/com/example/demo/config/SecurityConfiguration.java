@@ -43,7 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-
+// Config để AuthenticationManagerBuilder sử dụng cái UserDetailService nào và passwordEncoder nào ?
+// nhưng vì trong project chỉ có 1 cái nên ta không cần phải config nữa
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth)
 //            throws Exception {
