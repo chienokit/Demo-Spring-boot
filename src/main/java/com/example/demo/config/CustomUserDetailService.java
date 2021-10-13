@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,8 +43,20 @@ public class CustomUserDetailService implements UserDetailsService {
                 }
                 grantedAuthorityList.add(grantedAuthority);
             }
-            UserDetails userDetails = new User(userEntity.getUserName(), userEntity.getPassWord(), grantedAuthorityList);
-            return userDetails;
+            CustomUserDetails customerUserDetails = new CustomUserDetails(userEntity);
+            //UserDetails userDetails = new User(userEntity.getUserName(), userEntity.getPassWord(), grantedAuthorityList);
+            //return userDetails;
+            return customerUserDetails;
         }
     }
+    // JWTAuthenticationFilter sẽ sử dụng hàm này
+    @Transactional
+    public UserDetails loadUserById(String id) {
+        UserEntity user = userRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with id : " + id)
+        );
+
+        return new CustomUserDetails(user);
+    }
+
 }
