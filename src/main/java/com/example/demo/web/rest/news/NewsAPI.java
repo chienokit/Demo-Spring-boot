@@ -5,6 +5,7 @@ import com.example.demo.service.news.dto.NewsDTO;
 import com.example.demo.service.news.input.NewsInput;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,16 +28,19 @@ public class NewsAPI {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NewsDTO> save(@RequestBody NewsInput newsInput) {
         return newsService.save(newsInput);
     }
 
     @PutMapping("/{newsId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NewsDTO> update(@RequestBody NewsInput newsInput, @PathVariable String newsId) {
         return newsService.update(newsInput, newsId);
     }
 
     @DeleteMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<String[]> delete(@RequestBody String[] ids) {
         return newsService.delete(ids);
     }

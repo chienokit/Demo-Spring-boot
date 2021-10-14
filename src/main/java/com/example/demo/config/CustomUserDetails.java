@@ -1,14 +1,19 @@
 package com.example.demo.config;
 
+import com.example.demo.domain.RoleEntity;
 import com.example.demo.domain.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +22,21 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Mặc định mình sẽ để tất cả là ROLE_USER. Để demo cho đơn giản.
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<RoleEntity> roleEntityList = user.getRoles();
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+        for(RoleEntity roleEntity : roleEntityList) {
+            GrantedAuthority grantedAuthority;
+            if(roleEntity.getCode().equals("user")) {
+                grantedAuthority = new SimpleGrantedAuthority("USER");
+                authorityList.add(grantedAuthority);
+            }
+            if(roleEntity.getCode().equals("admin")) {
+                grantedAuthority = new SimpleGrantedAuthority("ADMIN");
+                authorityList.add(grantedAuthority);
+            }
+        }
+        return authorityList;
     }
 
     @Override

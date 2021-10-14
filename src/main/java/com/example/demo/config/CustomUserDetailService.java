@@ -31,21 +31,7 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("Login fail! User name is not exist");
         } else {
             UserEntity userEntity = optionalUserEntity.get();
-            List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-            List<RoleEntity> roleEntityList = userEntity.getRoles();
-            for (RoleEntity roleEntity : roleEntityList) {
-                GrantedAuthority grantedAuthority = null;
-                if (Objects.equals(roleEntity.getCode(), "admin")) {
-                    grantedAuthority = new SimpleGrantedAuthority("ADMIN");
-                }
-                if (roleEntity.getCode().equals("user")) {
-                    grantedAuthority = new SimpleGrantedAuthority("USER");
-                }
-                grantedAuthorityList.add(grantedAuthority);
-            }
             CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
-            //UserDetails userDetails = new User(userEntity.getUserName(), userEntity.getPassWord(), grantedAuthorityList);
-            //return userDetails;
             return customUserDetails;
         }
     }
