@@ -1,9 +1,9 @@
 package com.example.demo.web.rest.user;
 
-import com.example.demo.config.CustomUserDetails;
-import com.example.demo.config.LoginRequest;
-import com.example.demo.config.LoginResponse;
-import com.example.demo.config.jwt.JwtTokenProvider;
+import com.example.demo.security.userdetail.CustomUserDetails;
+import com.example.demo.security.LoginRequest;
+import com.example.demo.security.LoginResponse;
+import com.example.demo.security.jwt.JwtTokenProvider;
 import com.example.demo.service.user.UserService;
 import com.example.demo.service.user.dto.UserDTO;
 import com.example.demo.service.user.input.UserInput;
@@ -15,8 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.RolesAllowed;
 
 @RestController
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.security.userdetail;
 
 import com.example.demo.domain.RoleEntity;
 import com.example.demo.domain.UserEntity;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Data

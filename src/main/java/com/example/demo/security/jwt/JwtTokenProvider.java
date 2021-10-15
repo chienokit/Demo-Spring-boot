@@ -1,6 +1,6 @@
-package com.example.demo.config.jwt;
+package com.example.demo.security.jwt;
 
-import com.example.demo.config.CustomUserDetails;
+import com.example.demo.security.userdetail.CustomUserDetails;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
