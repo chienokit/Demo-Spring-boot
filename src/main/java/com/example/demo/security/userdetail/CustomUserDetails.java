@@ -21,7 +21,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<RoleEntity> roleEntityList = user.getRoles();
         List<GrantedAuthority> authorityList = new ArrayList<>();
         for(RoleEntity roleEntity : roleEntityList) {
@@ -32,6 +31,10 @@ public class CustomUserDetails implements UserDetails {
             }
             if(roleEntity.getCode().equals("admin")) {
                 grantedAuthority = new SimpleGrantedAuthority("ADMIN");
+                authorityList.add(grantedAuthority);
+            }
+            if(roleEntity.getCode().equals("super_admin")) {
+                grantedAuthority = new SimpleGrantedAuthority("SUPER_ADMIN");
                 authorityList.add(grantedAuthority);
             }
         }

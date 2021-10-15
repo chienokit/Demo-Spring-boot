@@ -31,6 +31,11 @@ public class UserAPI {
         return userService.save(userInput);
     }
 
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN')")
+    @PutMapping
+    public ResponseEntity<UserDTO> update(@RequestBody UserInput userInput, @PathVariable String id) {
+        return userService.update(userInput, id);
+    }
 
     @PostMapping("/login")
     public LoginResponse authenticateUser(@RequestBody LoginRequest loginRequest) {

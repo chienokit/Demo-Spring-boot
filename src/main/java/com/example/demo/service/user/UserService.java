@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
     ResponseEntity<UserDTO> save(UserInput userInput);
-    ResponseEntity<UserDTO> update(UserInput userInput);
+    ResponseEntity<UserDTO> update(UserInput userInput, String userID);
     ResponseEntity<UserDTO> delete(String userName);
 
 }
