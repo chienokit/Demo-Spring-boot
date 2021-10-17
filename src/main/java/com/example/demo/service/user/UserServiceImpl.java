@@ -45,19 +45,25 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity<UserDTO> update(UserInput userInput, String userID) {
-        UserEntity userEntity;
-        String[] roleCodes = userInput.getRoleCodes();
-        userMapper.inputToEntity(userInput, userEntity);
-        List<RoleEntity> roleEntities = new ArrayList<>();
-        for(String roleCode : roleCodes) {
-            Optional<RoleEntity> optionalRoleEntity =  roleRepository.findByCode(roleCode);
-            if(optionalRoleEntity.isPresent()) {
-                roleEntities.add(optionalRoleEntity.get());
-            } else {
-                throw new RuntimeException("role is not exist");
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(userID);
+        if(optionalUserEntity.isPresent()) {
+            UserEntity userEntity = optionalUserEntity.get();
+            String[] roleCodes = userInput.getRoleCodes();
+            userMapper.inputToEntity(userInput, userEntity);
+            List<RoleEntity> roleEntities = new ArrayList<>();
+            for(String roleCode : roleCodes) {
+                Optional<RoleEntity> optionalRoleEntity =  roleRepository.findByCode(roleCode);
+                if(optionalRoleEntity.isPresent()) {
+                    roleEntities.add(optionalRoleEntity.get());
+                } else {
+                    throw new RuntimeException("role is not exist");
+                }
             }
+            userEntity.setRoles(roleEntities);
         }
-        userEntity.setRoles(roleEntities);
+        else {
+            throw new RuntimeException("User is not exist");
+        }
 
         return null;
     }

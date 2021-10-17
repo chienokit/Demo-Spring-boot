@@ -19,7 +19,6 @@ public class NewsAPI {
     @GetMapping
     public ResponseEntity<List<NewsDTO>> findAll(@RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        List<NewsDTO> newsDTOList;
         if(pageIndex != null && pageSize != null) {
             return newsService.findAll(pageSize, pageIndex);
         } else {
