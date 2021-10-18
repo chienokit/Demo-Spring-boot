@@ -25,7 +25,7 @@ public class UserAPI {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+   // @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<UserDTO> save(@RequestBody UserInput userInput) {
         return userService.save(userInput);
@@ -54,5 +54,11 @@ public class UserAPI {
         String jwt = tokenProvider.generateToken((CustomUserDetails) authentication.getPrincipal());
         return new LoginResponse(jwt);
 
+    }
+
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN')")
+    @DeleteMapping("/{userName}")
+    public ResponseEntity<UserDTO> delete(@PathVariable String userName) {
+        return userService.delete(userName);
     }
 }

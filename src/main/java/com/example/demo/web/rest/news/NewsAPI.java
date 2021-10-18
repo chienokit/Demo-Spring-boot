@@ -27,7 +27,7 @@ public class NewsAPI {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<NewsDTO> save(@RequestBody NewsInput newsInput) {
         return newsService.save(newsInput);
     }

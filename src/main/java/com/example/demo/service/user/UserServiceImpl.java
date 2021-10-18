@@ -9,6 +9,7 @@ import com.example.demo.service.user.input.UserInput;
 import com.example.demo.service.user.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,12 +24,15 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ResponseEntity<UserDTO> save(UserInput userInput) {
         UserEntity userEntity;
         String[] roleCodes = userInput.getRoleCodes();
         userEntity = userMapper.inputToEntity(userInput);
+        // Mã hóa mật khẩu người dùng
+        userEntity.setPassWord(passwordEncoder.encode(userEntity.getPassWord()));
         List<RoleEntity> roleEntities = new ArrayList<>();
         for (String roleCode : roleCodes) {
             Optional<RoleEntity> optionalRoleEntity = roleRepository.findByCode(roleCode);
@@ -48,8 +52,12 @@ public class UserServiceImpl implements UserService{
         Optional<UserEntity> optionalUserEntity = userRepository.findById(userID);
         if(optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
-            String[] roleCodes = userInput.getRoleCodes();
+            // Kiểm tra mật khẩu có thay đổi không nếu thay đổi thì phải mã hóa
+            if(!userInput.getPassWord().equals(userEntity.getPassWord())) {
+                userInput.setPassWord(passwordEncoder.encode(userInput.getPassWord()));
+            }
             userMapper.inputToEntity(userInput, userEntity);
+            String[] roleCodes = userInput.getRoleCodes();
             List<RoleEntity> roleEntities = new ArrayList<>();
             for(String roleCode : roleCodes) {
                 Optional<RoleEntity> optionalRoleEntity =  roleRepository.findByCode(roleCode);
@@ -60,16 +68,20 @@ public class UserServiceImpl implements UserService{
                 }
             }
             userEntity.setRoles(roleEntities);
+            userRepository.save(userEntity);
+            return ResponseEntity.ok(userMapper.entityToDTO(userEntity));
         }
         else {
             throw new RuntimeException("User is not exist");
         }
-
-        return null;
     }
 
     @Override
     public ResponseEntity<UserDTO> delete(String userName) {
-        return null;
+        Optional<UserEntity> optionalUserEntity = userRepository.findByUserName(userName);
+        if(optionalUserEntity.isPresent()) {
+            userRepository.delete(optionalUserEntity.get());
+        }
+        return ResponseEntity.ok(userMapper.entityToDTO(optionalUserEntity.get()));
     }
 }

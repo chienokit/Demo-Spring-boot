@@ -4,6 +4,7 @@ import com.example.demo.security.jwt.JwtAuthenticationFilter;
 import com.example.demo.security.service.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -86,6 +87,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/user/login").permitAll()// Cho phép tất cả mọi người truy cập vào địa chỉ này
+                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/news/**").permitAll()
+                .antMatchers("/api/role/**").permitAll()
+                .antMatchers("/api/category/**").permitAll()
                 .anyRequest().authenticated();
 
         // Thêm một lớp Filter kiểm tra jwt
